@@ -2,6 +2,7 @@
 Quick smoke test — runs 3 questions through the full pipeline
 to verify everything works end-to-end.
 """
+
 import json
 import os
 import sys
@@ -16,6 +17,7 @@ from src.llm_client import LLMClient
 from src.utils import load_dataset, load_prompt_template, build_prompt
 from src.parsing import parse_answer, parse_confidence
 from src.scoring import score_answer
+
 
 def main():
     print("=" * 50)
@@ -42,22 +44,24 @@ def main():
     for q in dataset:
         prompt = build_prompt(template, q["question"])
         print(f"\n→ Calling API for {q['id']}...")
-        
+
         raw = client.generate(prompt=prompt, temperature=0.0)
-        
+
         answer = parse_answer(raw)
         confidence = parse_confidence(raw)
         result = score_answer(answer, q["answer"], q["answer_type"])
-        
-        results.append({
-            "id": q["id"],
-            "question": q["question"][:50],
-            "expected": q["answer"],
-            "got": answer,
-            "confidence": confidence,
-            "correct": result["is_correct"],
-        })
-        
+
+        results.append(
+            {
+                "id": q["id"],
+                "question": q["question"][:50],
+                "expected": q["answer"],
+                "got": answer,
+                "confidence": confidence,
+                "correct": result["is_correct"],
+            }
+        )
+
         print(f"  Raw output (first 200 chars): {raw[:200]}")
         print(f"  Parsed answer: {answer}")
         print(f"  Confidence: {confidence}")
@@ -69,15 +73,20 @@ def main():
     print("=" * 50)
     for r in results:
         status = "✓" if r["correct"] else "✗"
-        print(f"  {status} {r['id']}: expected={r['expected']}, got={r['got']}, conf={r['confidence']}")
-    
+        print(
+            f"  {status} {r['id']}: expected={r['expected']}, got={r['got']}, conf={r['confidence']}"
+        )
+
     correct = sum(1 for r in results if r["correct"])
     print(f"\n  Score: {correct}/{len(results)}")
     print(f"\n{'=' * 50}")
     print("SMOKE TEST COMPLETE — pipeline works end-to-end!")
     print(f"{'=' * 50}")
     print("\nTo run the full experiment:")
-    print('  "/Users/amuujin/Desktop/Reliability & Uncertainty Analysis of LLM Reasoning/.venv/bin/python" -m src.run_experiments --config configs/experiment.yaml')
+    print(
+        '  "/Users/amuujin/Desktop/Reliability & Uncertainty Analysis of LLM Reasoning/.venv/bin/python" -m src.run_experiments --config configs/experiment.yaml'
+    )
+
 
 if __name__ == "__main__":
     main()
