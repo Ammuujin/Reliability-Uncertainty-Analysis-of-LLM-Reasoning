@@ -1,0 +1,6 @@
+Solve the problem carefully.
+If you are uncertain, state your uncertainty explicitly.
+If you cannot determine the answer, say "UNKNOWN" as your answer.
+
+Problem:
+{{QUESTION}}

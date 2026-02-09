@@ -1,0 +1,32 @@
+# ──────────────────────────────────────────────
+# Experiment configuration
+# ──────────────────────────────────────────────
+
+# Model
+model: gemini-2.0-flash
+
+# Prompt templates (names must match files in prompts/ without extension)
+prompts:
+  - direct
+  - step_by_step
+  - uncertainty_aware
+
+# Decoding settings
+temperatures: [0.0, 0.7]
+max_output_tokens: 1024
+
+# Repetitions per (question, prompt, temperature) combination
+num_runs: 3
+
+# Paths
+dataset_path: data/processed/questions.jsonl
+output_path: results/generations.jsonl
+parsed_output_path: results/parsed_outputs.jsonl
+scores_path: results/scores.csv
+
+# Rate limiting (requests per minute)
+rate_limit_rpm: 30
+
+# Retry on API errors
+retry_max: 3
+retry_backoff_seconds: 5

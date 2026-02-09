@@ -1,0 +1,4 @@
+Solve the following problem. Provide only the final answer.
+
+Problem:
+{{QUESTION}}
